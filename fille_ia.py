@@ -18,7 +18,7 @@ else:
 # Initialisation du modèle Groq (Llama 3)
 llm = ChatGroq(
     temperature=0.8,
-    groq_api_key=CLÉ_API,
+    groq_api_key=api_key,
     model_name="llama3-8b-8192"
 )
 
