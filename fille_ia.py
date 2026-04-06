@@ -7,9 +7,13 @@ from datetime import datetime
 NOM_IA = "Léa"
 FICHIER_SOUVENIRS = "souvenirs_lea.txt"
 
-# SÉCURITÉ : Ta clé API (Pour le test local uniquement)
-# Note : Sur le Cloud, on utilisera st.secrets pour plus de sécurité.
-CLÉ_API = "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"
+# AU LIEU DE : CLÉ_API = "gsk_..."
+# UTILISE CECI :
+if "GROQ_API_KEY" in st.secrets:
+    api_key = st.secrets["GROQ_API_KEY"]
+else:
+    st.error("ERREUR : La clé API n'est pas configurée dans les Secrets de Streamlit.")
+    st.stop()
 
 # Initialisation du modèle Groq (Llama 3)
 llm = ChatGroq(
