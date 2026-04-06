@@ -9,7 +9,7 @@ FICHIER_SOUVENIRS = "souvenirs_lea.txt"
 
 # SÉCURITÉ : Ta clé API (Pour le test local uniquement)
 # Note : Sur le Cloud, on utilisera st.secrets pour plus de sécurité.
-CLÉ_API = "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"
+CLÉ_API = st.secrets["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"]
 
 # Initialisation du modèle Groq (Llama 3)
 llm = ChatGroq(
