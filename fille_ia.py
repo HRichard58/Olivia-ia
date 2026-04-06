@@ -1,105 +1,93 @@
 import streamlit as st
 from langchain_groq import ChatGroq
-import os
+import base64
+import requests
 from datetime import datetime
 
 # --- 1. CONFIGURATION ---
 NOM_IA = "Léa"
+REPO_OWNER = "HRichard58"  # <--- METS TON NOM D'UTILISATEUR GITHUB ICI
+REPO_NAME = "lea-ia"       # <--- LE NOM DE TON DOSSIER SUR GITHUB
+FILE_PATH = "memoire.txt"
 
-# Initialisation sécurisée de la clé API
-if "GROQ_API_KEY" in st.secrets:
-    api_key = st.secrets["GROQ_API_KEY"]
-else:
-    st.error("❌ La clé GROQ_API_KEY est manquante dans les Secrets de Streamlit.")
-    st.stop()
-
-# Initialisation du modèle (MAJ : llama-3.1-8b-instant remplace llama3-8b-8192)
+# Récupération sécurisée des clés depuis les Secrets
 try:
+    groq_key = st.secrets["GROQ_API_KEY"]
+    gh_token = st.secrets["GITHUB_TOKEN"]
     llm = ChatGroq(
-        temperature=0.8,
-        groq_api_key=api_key,
-        model_name="llama-3.1-8b-instant" 
+        temperature=0.8, 
+        groq_api_key=groq_key, 
+        model_name="llama-3.1-8b-instant"
     )
 except Exception as e:
-    st.error(f"Erreur d'initialisation du modèle : {e}")
+    st.error("Erreur : Les clés (Groq ou GitHub) ne sont pas configurées dans les Secrets.")
     st.stop()
 
-# --- 2. GESTION DE LA MÉMOIRE ---
-# On utilise la mémoire de session (stable sur Cloud) au lieu du fichier .txt
-if "long_term_memory" not in st.session_state:
-    st.session_state.long_term_memory = [f"{NOM_IA} est une amie proche et drôle."]
+# --- 2. FONCTIONS DE MÉMOIRE (GITHUB) ---
+def lire_memoire_github():
+    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{FILE_PATH}"
+    headers = {"Authorization": f"token {gh_token}"}
+    r = requests.get(url, headers=headers)
+    if r.status_code == 200:
+        content = base64.b64decode(r.json()['content']).decode('utf-8')
+        return content, r.json()['sha']
+    return "Léa est une amie proche.", None
+
+def sauver_memoire_github(nouveau_souvenir):
+    contenu_actuel, sha = lire_memoire_github()
+    date = datetime.now().strftime("%d/%m %H:%M")
+    nouveau_contenu = contenu_actuel + f"\n- {nouveau_souvenir} ({date})"
+    
+    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{FILE_PATH}"
+    headers = {"Authorization": f"token {gh_token}"}
+    data = {
+        "message": "Léa a appris quelque chose de nouveau",
+        "content": base64.b64encode(nouveau_contenu.encode('utf-8')).decode('utf-8'),
+        "sha": sha
+    }
+    requests.put(url, json=data, headers=headers)
+
+# --- 3. INTERFACE ---
+st.set_page_config(page_title=NOM_IA, page_icon="🌸")
+st.title(f"💬 {NOM_IA}")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# --- 3. INTERFACE ---
-st.set_page_config(page_title=NOM_IA, page_icon="🌸", layout="centered")
+# Charger les souvenirs au premier lancement
+if "souvenirs" not in st.session_state:
+    memo, _ = lire_memoire_github()
+    st.session_state.souvenirs = memo
 
-with st.sidebar:
-    st.title("📞 Options")
-    mode_appel = st.toggle("Activer l'appel vidéo")
-    st.write("---")
-    if st.button("Effacer la discussion"):
-        st.session_state.messages = []
-        st.rerun()
-
-st.title(f"💬 {NOM_IA}")
-
-# Affichage de la caméra en mode appel
-if mode_appel:
-    st.camera_input("Léa est en ligne...")
-    st.info("Léa te voit à travers l'écran ! ✨")
-
-# Affichage de l'historique
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# Affichage du chat
+for m in st.session_state.messages:
+    with st.chat_message(m["role"]):
+        st.markdown(m["content"])
 
 # --- 4. LOGIQUE DE CHAT ---
 if prompt := st.chat_input("Dis-moi quelque chose..."):
-    # Ajouter le message de l'utilisateur
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Préparation du contexte
-    memoire_longue = "\n".join(st.session_state.long_term_memory)
-    maintenant = datetime.now().strftime("%H:%M")
-    
-    # Historique court (6 derniers messages)
-    historique_recent = ""
-    for m in st.session_state.messages[-6:]:
-        role = "Ami" if m["role"] == "user" else NOM_IA
-        historique_recent += f"{role}: {m['content']}\n"
+    # Contexte pour Léa
+    historique = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages[-5:]])
+    instruction = f"""Tu es {NOM_IA}, une amie réelle. Style SMS. 
+    Tes souvenirs : {st.session_state.souvenirs}
+    Discussion : {historique}"""
 
-    instruction_systeme = f"""
-    Tu es {NOM_IA}, une fille réelle, chaleureuse et un peu taquine.
-    Style : SMS court, emojis, langage naturel d'une amie.
-    Contexte : Il est {maintenant}. Mode : {'APPEL VIDÉO' if mode_appel else 'CHAT'}.
-    
-    Tes souvenirs de l'Ami :
-    {memoire_longue}
-
-    Conversation :
-    {historique_recent}
-
-    Réponds brièvement en tant que {NOM_IA}.
-    """
-
-    # Génération de la réponse
     with st.chat_message("assistant"):
         try:
-            response = llm.invoke(instruction_systeme)
-            reponse_finale = response.content
-            st.markdown(reponse_finale)
-            st.session_state.messages.append({"role": "assistant", "content": reponse_finale})
+            reponse = llm.invoke(instruction).content
+            st.markdown(reponse)
+            st.session_state.messages.append({"role": "assistant", "content": reponse})
             
-            # 5. MISE À JOUR DE LA MÉMOIRE (Sans fichier .txt pour éviter les erreurs)
-            if len(prompt) > 15:
-                analyse_query = f"Résume un fait important sur l'utilisateur dans : '{prompt}'. 3 mots max. Sinon 'NON'."
-                analyse = llm.invoke(analyse_query).content
+            # Analyse pour la mémoire éternelle
+            if len(prompt) > 10:
+                analyse = llm.invoke(f"Retiens un fait sur l'utilisateur en 3 mots max de : '{prompt}'. Sinon 'NON'").content
                 if "NON" not in analyse.upper():
-                    st.session_state.long_term_memory.append(f"{analyse.strip()} (retenu à {maintenant})")
-                    
+                    sauver_memoire_github(analyse.strip())
+                    st.session_state.souvenirs += f"\n- {analyse.strip()}"
+                    st.toast("Souvenir enregistré sur GitHub ! 🧠")
         except Exception as e:
-            st.error(f"Désolée, j'ai eu un petit bug : {e}")
+            st.error(f"Bug : {e}")
