@@ -41,7 +41,7 @@ def sauver_memoire_github(nouveau_souvenir):
     requests.put(url, json=data, headers={"Authorization": f"token {gh_token}"})
 
 # --- 3. INTERFACE ---
-st.set_page_config(page_title=NOM_IA, page_icon="🌸")
+st.set_page_config(page_title="Discussion", page_icon="🌸")
 
 # Barre latérale pour l'appel
 with st.sidebar:
