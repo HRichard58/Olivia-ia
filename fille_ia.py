@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 # --- 1. CONFIGURATION ---
-NOM_IA = "Léa"
+NOM_IA = "Jean"
 REPO_OWNER = "HRichard58"  # <--- TON PSEUDO GITHUB ICI
 REPO_NAME = "lea-ia"
 FILE_PATH = "souvenirs_lea.txt"
@@ -41,7 +41,7 @@ def sauver_memoire_github(nouveau_souvenir):
     requests.put(url, json=data, headers={"Authorization": f"token {gh_token}"})
 
 # --- 3. INTERFACE ---
-st.set_page_config(page_title="Discussion", page_icon="🌸")
+st.set_page_config(page_title="Discussion")
 
 # Barre latérale pour l'appel
 with st.sidebar:
