@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 # --- 1. CONFIGURATION ---
-NOM_IA = "Jean"
+NOM_IA = "Léa"
 REPO_OWNER = "HRichard58"  # <--- TON PSEUDO GITHUB ICI
 REPO_NAME = "lea-ia"
 FILE_PATH = "souvenirs_lea.txt"
