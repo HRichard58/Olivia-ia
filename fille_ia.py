@@ -64,7 +64,7 @@ with st.sidebar:
 if mode_appel:
     st.markdown('<div class="avatar-container">', unsafe_allow_html=True)
     # Si tu as une image sur GitHub, on utilise son URL directe
-    url_visage = f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/main/lea_visage.gif"
+    url_visage = f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/main/x_visage.gif"
     st.image(url_visage, width=200)
     st.markdown('</div>', unsafe_allow_html=True)
     st.info("x t'écoute... (Utilise le micro de ton clavier)")
