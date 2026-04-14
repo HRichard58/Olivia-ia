@@ -83,7 +83,7 @@ if prompt := st.chat_input("Parle à x..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
 
-    historique = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages[-5:]])
+    historique = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages[-20:]])
     instruction = f"Tu es {NOM_IA}. En appel : {mode_appel}. Souvenirs : {st.session_state.souvenirs}. Historique : {historique}"
 
     with st.chat_message("assistant"):
