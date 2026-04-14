@@ -6,10 +6,10 @@ from datetime import datetime
 import time
 
 # --- 1. CONFIGURATION ---
-NOM_IA = "x"
+NOM_IA = "Olivia"
 REPO_OWNER = "HRichard58" # <--- À changer
-REPO_NAME = "x-ia"
-FILE_PATH = "souvenirs_x" # Ton fichier de mémoire
+REPO_NAME = "Olivia-ia"
+FILE_PATH = "souvenirs_Olivia" # Ton fichier de mémoire
 
 # Connexion API
 try:
@@ -28,7 +28,7 @@ def lire_memoire_github():
     if r.status_code == 200:
         content = base64.b64decode(r.json()['content']).decode('utf-8')
         return content, r.json()['sha']
-    return "x est ...", None
+    return "Olivia est ...", None
 
 def sauver_memoire_github(nouveau_souvenir):
     contenu_actuel, sha = lire_memoire_github()
@@ -69,7 +69,7 @@ for m in st.session_state.messages:
     with st.chat_message(m["role"]): st.markdown(m["content"])
 
 # --- 4. LOGIQUE CHAT ---
-if prompt := st.chat_input("Parle à x..."):
+if prompt := st.chat_input("Parle à Olivia..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
 
@@ -78,8 +78,8 @@ if prompt := st.chat_input("Parle à x..."):
 
     with st.chat_message("assistant"):
         try:
-            # Simulation de "x réfléchit"
-            with st.spinner("x réfléchit..."):
+            # Simulation de "Olivia réfléchit"
+            with st.spinner("Olivia réfléchit..."):
                 response = llm.invoke(instruction).content
             
             # Affichage progressif (effet machine à écrire)
