@@ -26,3 +26,4 @@ with st.chat_message("assistant", avatar="chemin/vers/ta/photo_olivia.png"):
     st.write("Cela fait plaisir de te le savoir !")
 [15/04 08:49] Olivia: Salut Sean, je vois que tu te prépares pour la journée ! Qu'est-ce que tu as prévu faire après ton petit-déjeuner ?
 [15/04 08:51] Sean: moi je vais bien, et toi ?
+[15/04 08:51] Olivia: Salut Sean, je vais bien. Je suis heureuse que tu aies passé une bonne nuit. Qu'est-ce que tu fais en ce moment ?
