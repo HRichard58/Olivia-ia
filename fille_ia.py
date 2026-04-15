@@ -96,7 +96,7 @@ if prompt := st.chat_input(f"Dis quelque chose à {NOM_IA}..."):
         f"Conversation actuelle : {historique_recent}"
     )
 
-    with st.chat_message("assistant", avatar="photo.jpg"):
+    with st.chat_message("assistant", avatar="avatar.jpg"):
         try:
             with st.spinner(f"{NOM_IA} réfléchit..."):
                 # On récupère la réponse brute de l'IA
