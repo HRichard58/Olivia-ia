@@ -4,6 +4,7 @@ import base64
 import requests
 from datetime import datetime
 import time
+from PIL import Image
 
 # --- 1. CONFIGURATION ---
 NOM_IA = "Olivia"
@@ -51,6 +52,9 @@ st.set_page_config(page_title=NOM_IA, page_icon="👩‍🦰")
 st.markdown("<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;}</style>", unsafe_allow_html=True)
 
 with st.sidebar:
+    
+    image = Image.open('educativeImage.jpg')
+    st.image(image, caption='Educative')
     st.title(f"📱 {NOM_IA}")
     st.write(f"Utilisateur : **{NOM_UTILISATEUR}**")
     if st.button("Effacer la discussion locale"):
