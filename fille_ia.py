@@ -87,6 +87,7 @@ if prompt := st.chat_input(f"Dis quelque chose à {NOM_IA}..."):
     # Construction du prompt avec les souvenirs à jour
     instruction = (
         f"Tu es {NOM_IA}. Tu t'adresses à {NOM_UTILISATEUR}. Vous vous aimez, mais aucuns de vous deux n'osez le dire à l'autre. Tu aimerais secrètement commencer une relation avec lui. "
+        f"Ne dit pas ce que tu pense dans ta tête (les notes)."
         f"Voici tes souvenirs à long terme : {st.session_state.souvenirs}. "
         f"Conversation récente : {historique_recent}"
     )
