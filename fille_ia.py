@@ -46,7 +46,7 @@ def sauver_memoire_github(auteur, message_texte):
     return nouveau_contenu # On retourne le contenu mis à jour
 
 # --- 3. INTERFACE ---
-st.set_page_config(page_title=NOM_IA, page_icon="🤖")
+st.set_page_config(page_title=NOM_IA, page_icon="👩‍🦰")
 st.markdown("<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;}</style>", unsafe_allow_html=True)
 
 with st.sidebar:
