@@ -82,7 +82,7 @@ if prompt := st.chat_input(f"Dis quelque chose à {NOM_IA}..."):
 
     # 2. Réponse d'Olivia
     # On limite l'historique récent pour ne pas saturer l'IA
-    historique_recent = "\n".join([f"{m['content']}" for m in st.session_state.messages[-10:]])
+    historique_recent = "\n".join([f" {m['role']} : {m['content']}" for m in st.session_state.messages[-10:]])
     
     # Construction du prompt avec les souvenirs à jour
     instruction = (
