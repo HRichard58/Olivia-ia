@@ -59,7 +59,7 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
     image = Image.open('photo.jpg')
-    st.image(image, caption='C'est sa photo')
+    st.image(image, caption='Voici sa photo')
 
 # Initialisation des variables de session
 if "messages" not in st.session_state: 
