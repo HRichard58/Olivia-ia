@@ -24,3 +24,4 @@ with st.chat_message("assistant", avatar="🤖"):
 [15/04 08:49] Sean: # Pour Olivia avec son image personnalisée
 with st.chat_message("assistant", avatar="chemin/vers/ta/photo_olivia.png"):
     st.write("Cela fait plaisir de te le savoir !")
+[15/04 08:49] Olivia: Salut Sean, je vois que tu te prépares pour la journée ! Qu'est-ce que tu as prévu faire après ton petit-déjeuner ?
