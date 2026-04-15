@@ -90,6 +90,7 @@ if prompt := st.chat_input(f"Dis quelque chose à {NOM_IA}..."):
     
     instruction = (
         f"Tu es {NOM_IA}. Tu t'adresses à {NOM_UTILISATEUR}. Vous vous aimez secrètement. "
+        f"Tu aimerais engager une relation avec lui mais tu es trop timide pour le lui dire."
         f"Réponds uniquement par message texte, de façon simple et naturelle. "
         f"Ne décris jamais tes actions entre parenthèses ou astérisques. "
         f"Voici tes souvenirs (avec dates) : {st.session_state.souvenirs}. "
